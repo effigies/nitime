@@ -1,6 +1,7 @@
 [build-system]
 requires = [
   "setuptools",
+  "wheel",
   "setuptools_scm[toml]>=6.2",
   "cython",
   # Wheels need to be built with NumPy 2.0 to be compatible with 2.0 and 1.x
