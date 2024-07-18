@@ -123,14 +123,14 @@ jobs:
       - name: Run tests
         run: pytest -v --pyargs nitime
 
-  test-wheel:
-    name: Test wheel
+  test-abi3-wheel:
+    name: Test ABI3 wheels
     needs: [build-wheel]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.11', '3.12']
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -154,7 +154,7 @@ jobs:
 
   pre-publish:
     runs-on: ubuntu-latest
-    needs: [test-sdist, test-wheel]
+    needs: [test-sdist, test-abi3-wheel]
     steps:
       - uses: actions/download-artifact@v3
         with:
