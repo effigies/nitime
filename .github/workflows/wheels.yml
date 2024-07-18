@@ -58,12 +58,21 @@ jobs:
       fail-fast: false
       matrix:
         buildplat:
-          - [ubuntu-latest, manylinux_x86_64]
           - [ubuntu-latest, musllinux_x86_64]
-          - [macos-13, macosx_x86_64]
-          - [macos-14, macosx_arm64]
+          - [ubuntu-latest, manylinux_aarch64]
+          - [macos-13, macosx_x86_64]  # native Intel hardware
           - [windows-latest, win_amd64]
-        python: ["cp312"]
+        python: ["cp38", "cp39", "cp310", "cp312"]
+        # No NumPy wheels on 3.8 aarch64 or musl
+        exclude:
+          - buildplat: [ubuntu-latest, manylinux_aarch64]
+            python: "cp38"
+          - buildplat: [ubuntu-latest, musllinux_x86_64]
+            python: "cp38"
+        include:
+          # Manylinux and arm64 builds (on native hardware) are cheap, do all in one
+          - { buildplat: ["ubuntu-latest", "manylinux_x86_64"], python: "*" }
+          - { buildplat: ["macos-14", "macosx_arm64"], python: "*" }
 
     steps:
       - uses: actions/checkout@v3
