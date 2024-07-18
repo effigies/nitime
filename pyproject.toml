@@ -1,9 +1,10 @@
 [build-system]
 requires = [
   "setuptools",
-  "wheel",
   "setuptools_scm[toml]>=6.2",
-  "cython",
+  "wheel; python_version >= '3.11'",
+  "cython >= 3.1.0a0; python_version >= '3.11'", # Requires cython/cython#5871
+  "cython; python_version < '3.11'",
   # Wheels need to be built with NumPy 2.0 to be compatible with 2.0 and 1.x
   "numpy>=2.0.0rc1,<3; python_version > '3.8'",
   # NEP29-minimum as of Aug 17, 2023 (1.25 doesn't support 3.8)
@@ -62,6 +63,9 @@ skip = "pp* cp38-*_aarch64 cp38-musllinux_*"
 # 64-bit builds only; 32-bit builds seem pretty niche these days, so
 # don't bother unless someone asks
 archs = ["native"]
+build-frontend = "build[uv]; args: --no-isolation"
+
+before-build = "pip install git+https://github.com/cython/cython.git@refs/pull/5871/merge"
 
 test-requires = [
     "pytest",
